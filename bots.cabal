@@ -50,3 +50,5 @@ test-suite openfaas-test
     build-depends:
         base >= 4.17.0.0
       , bots
+      , hspec
+    build-tool-depends: hspec-discover:hspec-discover
