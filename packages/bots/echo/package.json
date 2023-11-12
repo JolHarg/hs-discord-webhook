@@ -1,0 +1,6 @@
+{
+    "name": "bots-echo",
+    "version": "1.0.0",
+    "description": "bots-echo",
+    "main": "echo.js"
+}

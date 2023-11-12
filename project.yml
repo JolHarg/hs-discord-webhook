@@ -1,0 +1,19 @@
+parameters: {}
+environment: {}
+packages:
+    - name: bots
+      shared: false
+      environment: {}
+      parameters: {}
+      annotations: {}
+      functions:
+        - name: echo
+          binary: false
+          main: ""
+          runtime: nodejs:18
+          web: true
+          webSecure: false
+          parameters: {}
+          environment: {}
+          annotations: {}
+          limits: {}
