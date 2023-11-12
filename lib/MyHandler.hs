@@ -12,7 +12,7 @@ import Control.Monad.IO.Class
 import Crypto.Sign.Ed25519
 import Data.Aeson
 import Data.ByteString.Char8
-import Data.Map qualified as M
+import Data.Map                                     qualified as M
 import GHC.Generics
 import Network.DigitalOcean.CloudFunctions.Request  as Request
 import Network.DigitalOcean.CloudFunctions.Response as Response
@@ -26,7 +26,7 @@ data MyData = MyData {
     deriving anyclass (FromJSON, ToJSON)
 
 data HttpException = HttpException {
-    getCode :: Int,
+    getCode    :: Int,
     getMessage :: String
 }
     deriving stock (Show)
