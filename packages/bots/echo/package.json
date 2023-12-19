@@ -2,5 +2,8 @@
     "name": "bots-echo",
     "version": "1.0.0",
     "description": "bots-echo",
-    "main": "echo.js"
+    "main": "echo.js",
+    "dependencies": {
+        "@snyk/protect": "^1.1264.0"
+    }
 }
