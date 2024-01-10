@@ -4,6 +4,6 @@
     "description": "bots-echo",
     "main": "echo.js",
     "dependencies": {
-        "@snyk/protect": "^1.1264.0"
+        "@snyk/protect": "^1.1268.0"
     }
 }
