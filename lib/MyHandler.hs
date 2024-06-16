@@ -18,13 +18,6 @@ import Network.DigitalOcean.CloudFunctions.Request  as Request
 import Network.DigitalOcean.CloudFunctions.Response as Response
 import System.Environment
 
-data MyData = MyData {
-    myString :: String,
-    myInt    :: Int
-}
-    deriving stock Generic
-    deriving anyclass (FromJSON, ToJSON)
-
 data HttpException = HttpException {
     getCode    :: Int,
     getMessage :: String
@@ -32,12 +25,11 @@ data HttpException = HttpException {
     deriving stock (Show)
     deriving anyclass (Exception)
 
-
 myHandler ∷ MonadIO m ⇒ Request Object → m (Response String)
 myHandler Request { path = _path', Request.headers = headers', method = _method', http = _http', args = args', ctx = _ctx' } = do
     result <- runExceptT $ do
-        eSignature <- ExceptT . pure . note (HttpException 400 "No signature found") $ M.lookup "X-Signature-Ed25519" headers'
-        eTimestamp <- ExceptT . pure . note (HttpException 400 "No timestamp found") $ M.lookup "X-Signature-Timestamp" headers'
+        signature <- ExceptT . pure . note (HttpException 400 "No signature found") $ M.lookup "X-Signature-Ed25519" headers'
+        timestamp <- ExceptT . pure . note (HttpException 400 "No timestamp found") $ M.lookup "X-Signature-Timestamp" headers'
         publicKey <- liftIO $ getEnv "DISCORD_PUBLIC_KEY"
         let rawBody = encode args'
         pure "Hello World!"
