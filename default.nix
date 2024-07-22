@@ -81,8 +81,7 @@ let
     ]);
     withHoogle = false;
   };
-  exe = lib.justStaticExecutables (myHaskellPackages.bots);
-in
+  in
 {
   inherit shell;
   bots = lib.justStaticExecutables (myHaskellPackages.bots);
