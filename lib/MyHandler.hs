@@ -1,6 +1,4 @@
 {-# LANGUAGE DeriveAnyClass     #-}
-
-{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE OverloadedLists    #-}
 
 module MyHandler where
