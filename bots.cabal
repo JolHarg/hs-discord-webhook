@@ -27,8 +27,7 @@ library
 
   hs-source-dirs:     lib
   default-language:   GHC2024
-  default-extensions:
-    UnicodeSyntax
+  default-extensions: UnicodeSyntax
 
 executable bots
   import:             warnings
@@ -42,14 +41,12 @@ executable bots
 
   hs-source-dirs:     src
   default-language:   GHC2024
-  default-extensions:
-    UnicodeSyntax
+  default-extensions: UnicodeSyntax
 
 test-suite openfaas-test
   import:             warnings
   default-language:   GHC2024
-  default-extensions:
-    UnicodeSyntax
+  default-extensions: UnicodeSyntax
   type:               exitcode-stdio-1.0
   hs-source-dirs:     test
   main-is:            Spec.hs
@@ -58,5 +55,6 @@ test-suite openfaas-test
     , bots
     , hspec
     , QuickCheck
+
   other-modules:
   build-tool-depends: hspec-discover:hspec-discover
