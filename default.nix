@@ -42,7 +42,7 @@ let
               rm -rf $PACKAGE/bots
               cp build/bin/bots $PACKAGE/bots
               rm -rf $PACKAGE/*.so*
-              cp ${pkgsX86.libffi.outPath}/lib64/libffi.so.8.1.2 $PACKAGE/libffi.so.8
+              cp ${pkgsX86.libffi.outPath}/lib64/libffi.so.8.1.4 $PACKAGE/libffi.so.8
               cp ${pkgsX86.gmp.outPath}/lib/libgmp.so.10.5.0 $PACKAGE/libgmp.so.10
               cp ${pkgsX86.glibc.outPath}/lib/{libc.so.6,libm.so.6,librt.so.1,libdl.so.2,ld-linux-x86-64.so.2} $PACKAGE/
               #x86_64-unknown-linux-gnu-strip $PACKAGE/bots
