@@ -1,8 +1,8 @@
 {
-    "name": "bots-echo",
+    "name": "bots-handler",
     "version": "1.0.0",
-    "description": "bots-echo",
-    "main": "echo.js",
+    "description": "bots-handler",
+    "main": "handler.js",
     "dependencies": {
         "@snyk/protect": "^1.1294.0"
     }

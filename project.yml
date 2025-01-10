@@ -7,7 +7,7 @@ packages:
       parameters: {}
       annotations: {}
       functions:
-        - name: echo
+        - name: handler
           binary: false
           main: ""
           runtime: nodejs:18

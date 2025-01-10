@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedLists     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module MyHandler where
+module DiscordHandler where
 
 -- import Control.Error.Util
 import Control.Exception
@@ -65,8 +65,8 @@ instance ToJSON DiscordWebhookResponse where
 -- | TODO: the response should be short-circuitable
 
 
-myHandler ∷ (MonadIO m) ⇒ Request String → m (Response (Maybe DiscordWebhookResponse))
-myHandler Request { path = _path', Request.headers = headers', method = method', http = _http', args = args', ctx = _ctx' } = do
+discordHandler ∷ (MonadIO m) ⇒ Request String → m (Response (Maybe DiscordWebhookResponse))
+discordHandler Request { path = _path', Request.headers = headers', method = method', http = _http', args = args', ctx = _ctx' } = do
     -- don't overcomplicate it
     mPubKeyS <- liftIO $ lookupEnv "DISCORD_PUBLIC_KEY"
 

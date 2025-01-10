@@ -1,7 +1,7 @@
 module Main (main) where
 
-import MyHandler
+import DiscordHandler
 import Network.DigitalOcean.CloudFunctions.Handler
 
 main ∷ IO ()
-main = handle myHandler
+main = handle discordHandler

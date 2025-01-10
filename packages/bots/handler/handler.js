@@ -4,7 +4,6 @@ const main = (args, ctx) => new Promise((res, rej) => {
     try {
         const { http, __ow_path, __ow_headers, __ow_method, ...ownArgs } = args;
 
-        // const ls = spawn('ldd', ["./openfaa-examples"]);
         process.env.LD_LIBRARY_PATH = `${process.cwd()}:${process.env.LD_LIBRARY_PATH}`;
 
         // @TODO: pass as stdin rather than args
@@ -99,7 +98,7 @@ module.exports = {
     main  
 };
 
-// E.g. TEST=1 node packages/bots/echo/echo.js '{"__ow_path":"aaa","__ow_headers":{},"__ow_method":"POST","http":{},"myString":"b","myInt":2,"ctx":{}}'
+// E.g. TEST=1 node packages/bots/handler/handler.js '{"__ow_path":"aaa","__ow_headers":{},"__ow_method":"POST","http":{},"myString":"b","myInt":2,"ctx":{}}'
 if (process.env.TEST) {
     process.chdir(__dirname);
     module.exports.main(JSON.parse(process.argv[2]), {}).then(output => console.log(JSON.stringify(output, null, 4))).catch(console.error);

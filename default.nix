@@ -55,7 +55,7 @@ let
         git clean -Xf packages
       }
 
-      [[ -f packages/bots/echo/libc.so.6 ]] || build
+      [[ -f packages/bots/handler/libc.so.6 ]] || build
 
       # wget -c https://raw.githubusercontent.com/oufm/packelf/master/packelf.sh
       # chmod +x packelf.sh
