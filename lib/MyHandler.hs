@@ -6,21 +6,22 @@ module MyHandler where
 
 -- import Control.Error.Util
 import Control.Exception
-import Control.Monad
+-- import Control.Monad
 -- import Control.Monad.Catch
-import Control.Monad.Except
+-- import Control.Monad.Except
 import Control.Monad.IO.Class
-import Crypto.Sign.Ed25519
+import Crypto.Error
+import Crypto.PubKey.Ed25519
 import Data.Aeson
 import Data.ByteString.Char8 qualified as BSB
-import Data.ByteString qualified as BSW -- for ByteStringWord
+-- import Data.ByteString qualified as BSW -- for ByteStringWord
 import Data.Map                                     qualified as M
 import GHC.Generics
 import Network.DigitalOcean.CloudFunctions.Request  as Request
 import Network.DigitalOcean.CloudFunctions.Response as Response
 import System.Environment
-import System.IO.Error
-import Data.Aeson (Options(fieldLabelModifier))
+-- import System.IO.Error
+-- import Data.Aeson (Options(fieldLabelModifier))
 
 data HttpException = HttpException {
     getCode    :: Int,
@@ -34,15 +35,27 @@ type DiscordWebhookPayloadType = Int
 discordWebhookPayloadTypePing ∷ DiscordWebhookPayloadType
 discordWebhookPayloadTypePing = 1
 
-newtype DiscordWebhookRequest = DiscordWebhookRequest {
-    _type :: DiscordWebhookPayloadType
+data DiscordEvent = DiscordEvent {
+    _deType :: String,
+    _deTimestamp :: String,
+    _deData :: Object
+} deriving (Eq, Show, Generic)
+
+instance FromJSON DiscordEvent where
+  parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 3 })
+
+data DiscordWebhookRequest = DiscordWebhookRequest {
+    _type :: DiscordWebhookPayloadType,
+    _version :: Int,
+    _application_id :: Integer,
+    _event :: Maybe DiscordEvent
 } deriving stock (Eq, Show, Generic)
 
 instance FromJSON DiscordWebhookRequest where
   parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 1 })
 
 newtype DiscordWebhookResponse = DiscordWebhookResponse {
-    _RENAME_ME_type :: DiscordWebhookPayloadType
+    result :: String
 } deriving stock (Eq, Show, Generic)
 
 instance ToJSON DiscordWebhookResponse where
@@ -55,12 +68,15 @@ instance ToJSON DiscordWebhookResponse where
 myHandler ∷ (MonadIO m) ⇒ Request String → m (Response (Maybe DiscordWebhookResponse))
 myHandler Request { path = _path', Request.headers = headers', method = method', http = _http', args = args', ctx = _ctx' } = do
     -- don't overcomplicate it
-    mPubKey <- PublicKey . BSW.pack <$> lookupEnv "DISCORD_PUBLIC_KEY"
+    mPubKeyS <- liftIO $ lookupEnv "DISCORD_PUBLIC_KEY"
+
+    -- TODO hex
+    let mPubKey = maybeCryptoError . publicKey . BSB.pack =<< mPubKeyS
 
     case mPubKey of
-        Nothing -> internalServerError "Missing public key"
+        Nothing -> internalServerError "Missing/invalid public key"
         Just pubKey -> do
-            let mReqData = decodeStrict args' :: Maybe DiscordWebhookRequest
+            let mReqData = decodeStrict (BSB.pack args') :: Maybe DiscordWebhookRequest
             case mReqData of
                 Nothing -> badRequest "Invalid JSON"
                 Just reqData ->
@@ -68,17 +84,19 @@ myHandler Request { path = _path', Request.headers = headers', method = method',
                     then
                         noContent
                     else do
-                        let msSignature = Signature . BSW.pack <$> M.lookup "X-Signature-Ed25519" headers'
+                        -- TODO hex
+                        let msSignature = maybeCryptoError . signature . BSB.pack =<< M.lookup "X-Signature-Ed25519" headers'
                         case msSignature of
                             Nothing -> badRequest "No signature"
-                            Just signature -> do
-                                let msTimestamp = BSW.pack <$> M.lookup "X-Signature-Timestamp" headers'
+                            Just signature' -> do
+                                let msTimestamp = M.lookup "X-Signature-Timestamp" headers'
                                 case msTimestamp of
                                     Nothing -> badRequest "No timestamp"
                                     Just timestamp -> do
-                                        let verify = dverify pubKey signedMessage signature
-                                        if verify
-                                            then ok
+                                        let signedMessage = BSB.pack $ timestamp <> args' -- TODO get POST data and add it to timestamp
+                                        let verified = verify pubKey signedMessage signature'
+                                        if verified
+                                            then ok "OK"
                                             else forbidden "Invalid signature"
     where
         response status resp = pure $ Response {

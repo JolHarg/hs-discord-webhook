@@ -19,7 +19,7 @@ library
     , base        >=4.20.0.0
     , bytestring
     , containers
-    , ed25519
+    , cryptonite
     -- , errors
     -- , exceptions
     , mtl
