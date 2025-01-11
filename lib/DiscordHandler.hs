@@ -65,7 +65,7 @@ instance ToJSON DiscordWebhookResponse where
 -- | We want the string and also to decode it. No need to do any decoding for us today.
 -- | TODO: the response should be short-circuitable
 
-
+-- TODO MonadEnv
 discordHandler ∷ (MonadIO m) ⇒ Request String → m (Response (Maybe DiscordWebhookResponse))
 discordHandler Request { path = _path', Request.headers = headers', method = method', http = _http', args = args', ctx = _ctx' } = do
     -- don't overcomplicate it
