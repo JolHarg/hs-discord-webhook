@@ -7,7 +7,7 @@ Bots for use with OpenFAAS.
 Setup:
 ```bash
 doctl sls install
-doctl sls ns create -l bots -r lon
+doctl sls ns create -l bots -r lon1
 doctl sls connect bots
 ```
 

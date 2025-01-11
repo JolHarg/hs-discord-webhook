@@ -15,6 +15,6 @@ packages:
           webSecure: false
           parameters: {}
           environment:
-            DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY}
+            DISCORD_PUBLIC_KEY: "${DISCORD_PUBLIC_KEY}"
           annotations: {}
           limits: {}

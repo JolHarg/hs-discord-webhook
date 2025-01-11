@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedLists     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module DiscordHandler where
+module DiscordHandler (discordHandler) where
 
 -- import Control.Error.Util
 import Control.Exception
@@ -13,6 +13,7 @@ import Control.Monad.IO.Class
 import Crypto.Error
 import Crypto.PubKey.Ed25519
 import Data.Aeson
+import Data.ByteString.Base16 qualified as Hex
 import Data.ByteString.Char8 qualified as BSB
 -- import Data.ByteString qualified as BSW -- for ByteStringWord
 import Data.Map                                     qualified as M
@@ -71,7 +72,7 @@ discordHandler Request { path = _path', Request.headers = headers', method = met
     mPubKeyS <- liftIO $ lookupEnv "DISCORD_PUBLIC_KEY"
 
     -- TODO hex
-    let mPubKey = maybeCryptoError . publicKey . BSB.pack =<< mPubKeyS
+    let mPubKey = maybeCryptoError . publicKey . Hex.decodeLenient . BSB.pack =<< mPubKeyS
 
     case mPubKey of
         Nothing -> internalServerError "Missing/invalid public key"
@@ -85,7 +86,7 @@ discordHandler Request { path = _path', Request.headers = headers', method = met
                         noContent
                     else do
                         -- TODO hex
-                        let msSignature = maybeCryptoError . signature . BSB.pack =<< M.lookup "X-Signature-Ed25519" headers'
+                        let msSignature = maybeCryptoError . signature . Hex.decodeLenient . BSB.pack =<< M.lookup "X-Signature-Ed25519" headers'
                         case msSignature of
                             Nothing -> badRequest "No signature"
                             Just signature' -> do
