@@ -43,7 +43,10 @@ data DiscordEvent = DiscordEvent {
 } deriving (Eq, Show, Generic)
 
 instance FromJSON DiscordEvent where
-  parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 3 })
+    parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 3 })
+
+instance ToJSON DiscordEvent where
+    toJSON = genericToJSON (defaultOptions { fieldLabelModifier = ("_de" <>) })
 
 data DiscordWebhookRequest = DiscordWebhookRequest {
     _type :: DiscordWebhookPayloadType,
@@ -53,20 +56,21 @@ data DiscordWebhookRequest = DiscordWebhookRequest {
 } deriving stock (Eq, Show, Generic)
 
 instance FromJSON DiscordWebhookRequest where
-  parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 1 })
+    parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 1 })
+
+instance ToJSON DiscordWebhookRequest where
+    toJSON = genericToJSON (defaultOptions { fieldLabelModifier = ("_" <>) })
 
 newtype DiscordWebhookResponse = DiscordWebhookResponse {
     result :: String
 } deriving stock (Eq, Show, Generic)
-
-instance ToJSON DiscordWebhookResponse where
-    toJSON = genericToJSON (defaultOptions { fieldLabelModifier = drop 1 })
+    deriving anyclass (FromJSON, ToJSON)
 
 -- | We want the string and also to decode it. No need to do any decoding for us today.
 -- | TODO: the response should be short-circuitable
 
 -- TODO MonadEnv
-discordHandler ∷ (MonadIO m) ⇒ Request String → m (Response (Maybe DiscordWebhookResponse))
+discordHandler ∷ (MonadIO m) ⇒ Request DiscordWebhookRequest → m (Response (Maybe DiscordWebhookResponse))
 discordHandler Request { path = _path', Request.headers = headers', method = method', http = _http', args = args', ctx = _ctx' } = do
     -- don't overcomplicate it
     mPubKeyS <- liftIO $ lookupEnv "DISCORD_PUBLIC_KEY"
@@ -77,28 +81,24 @@ discordHandler Request { path = _path', Request.headers = headers', method = met
     case mPubKey of
         Nothing -> internalServerError "Missing/invalid public key"
         Just pubKey -> do
-            let mReqData = decodeStrict (BSB.pack args') :: Maybe DiscordWebhookRequest
-            case mReqData of
-                Nothing -> badRequest "Invalid JSON"
-                Just reqData ->
-                    if _type reqData == discordWebhookPayloadTypePing && method' == "POST"
-                    then
-                        noContent
-                    else do
-                        -- TODO hex
-                        let msSignature = maybeCryptoError . signature . Hex.decodeLenient . BSB.pack =<< M.lookup "X-Signature-Ed25519" headers'
-                        case msSignature of
-                            Nothing -> badRequest "No signature"
-                            Just signature' -> do
-                                let msTimestamp = M.lookup "X-Signature-Timestamp" headers'
-                                case msTimestamp of
-                                    Nothing -> badRequest "No timestamp"
-                                    Just timestamp -> do
-                                        let signedMessage = BSB.pack $ timestamp <> args' -- TODO get POST data and add it to timestamp
-                                        let verified = verify pubKey signedMessage signature'
-                                        if verified
-                                            then ok "OK"
-                                            else forbidden "Invalid signature"
+            -- TODO hex
+            let msSignature = maybeCryptoError . signature . Hex.decodeLenient . BSB.pack =<< M.lookup "X-Signature-Ed25519" headers'
+            case msSignature of
+                Nothing -> badRequest "No signature"
+                Just signature' -> do
+                    let msTimestamp = M.lookup "X-Signature-Timestamp" headers'
+                    case msTimestamp of
+                        Nothing -> badRequest "No timestamp"
+                        Just timestamp -> do
+                            let reqData = BSB.toStrict (encode args') :: BSB.ByteString
+                            let signedMessage = BSB.pack timestamp <> reqData
+                            let verified = verify pubKey signedMessage signature'
+                            if verified
+                                then
+                                    (if _type args' == discordWebhookPayloadTypePing && method' == "POST"
+                                        then noContent
+                                        else ok "OK")
+                                else forbidden "Invalid signature"
     where
         response status resp = pure $ Response {
             body = Just (DiscordWebhookResponse resp),

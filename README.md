@@ -1,6 +1,10 @@
-# bots
+# discord-webhook
 
-Bots for use with OpenFAAS.
+Discord webhook for use with OpenFAAS.
+
+Only for certain event types, none of which are of use to me right now, it turns out.
+
+https://discord.com/developers/docs/events/webhook-events#event-types
 
 ## Usage
 
@@ -15,6 +19,7 @@ Deployment:
 
 ```bash
 doctl sls deploy .
+doctl sls fn get bots/handler --url
 ```
 
 Undeployment:
