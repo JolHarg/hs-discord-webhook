@@ -15,18 +15,18 @@ library
   import:             warnings
   exposed-modules:    DiscordHandler
   build-depends:
-    , aeson
-    , base        >=4.20.0.0
+    , aeson              ^>=2.2.3.0
+    , base               ^>=4.20.0.0
     , base16-bytestring
-    , bytestring
-    , containers
+    , bytestring         ^>=0.12.2.0
+    , containers         ^>=0.7
     , cryptonite
-    -- , errors
-    -- , exceptions
-    , mtl
+    , mtl                ^>=2.3.1
     , openfaas
-    , text
+    , text               ^>=2.1.2
 
+  -- , errors ^>=2.3.0
+  -- , exceptions
   hs-source-dirs:     lib
   default-language:   GHC2024
   default-extensions: UnicodeSyntax
@@ -35,10 +35,10 @@ executable bots
   import:             warnings
   main-is:            Main.hs
   build-depends:
-    , aeson
-    , base        >=4.20.0.0
+    , aeson       ^>=2.2.3.0
+    , base        ^>=4.20.0.0
     , bots
-    , bytestring
+    , bytestring  ^>=0.12.2.0
     , openfaas
 
   hs-source-dirs:     src
@@ -53,10 +53,10 @@ test-suite openfaas-test
   hs-source-dirs:     test
   main-is:            Spec.hs
   build-depends:
-    , base        >=4.20.0.0
+    , base        ^>=4.20.0.0
     , bots
-    , hspec
-    , QuickCheck
+    , hspec       ^>=2.11.10
+    , QuickCheck  ^>=2.15.0.1
 
   other-modules:
   build-tool-depends: hspec-discover:hspec-discover
