@@ -13,8 +13,8 @@ import Control.Monad.IO.Class
 import Crypto.Error
 import Crypto.PubKey.Ed25519
 import Data.Aeson
-import Data.ByteString.Base16 qualified as Hex
-import Data.ByteString.Char8 qualified as BSB
+import Data.ByteString.Base16                       qualified as Hex
+import Data.ByteString.Char8                        qualified as BSB
 -- import Data.ByteString qualified as BSW -- for ByteStringWord
 import Data.Map                                     qualified as M
 import GHC.Generics
@@ -37,9 +37,9 @@ discordWebhookPayloadTypePing ∷ DiscordWebhookPayloadType
 discordWebhookPayloadTypePing = 1
 
 data DiscordEvent = DiscordEvent {
-    _deType :: String,
+    _deType      :: String,
     _deTimestamp :: String,
-    _deData :: Object
+    _deData      :: Object
 } deriving (Eq, Show, Generic)
 
 instance FromJSON DiscordEvent where
@@ -49,10 +49,10 @@ instance ToJSON DiscordEvent where
     toJSON = genericToJSON (defaultOptions { fieldLabelModifier = ("_de" <>) })
 
 data DiscordWebhookRequest = DiscordWebhookRequest {
-    _type :: DiscordWebhookPayloadType,
-    _version :: Int,
+    _type           :: DiscordWebhookPayloadType,
+    _version        :: Int,
     _application_id :: Integer,
-    _event :: Maybe DiscordEvent
+    _event          :: Maybe DiscordEvent
 } deriving stock (Eq, Show, Generic)
 
 instance FromJSON DiscordWebhookRequest where
