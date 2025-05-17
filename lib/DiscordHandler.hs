@@ -40,7 +40,7 @@ data DiscordEvent = DiscordEvent {
     _deType      :: String,
     _deTimestamp :: String,
     _deData      :: Object
-} deriving (Eq, Show, Generic)
+} deriving stock (Eq, Show, Generic)
 
 instance FromJSON DiscordEvent where
     parseJSON = genericParseJSON (defaultOptions { fieldLabelModifier = drop 3 })
@@ -100,6 +100,7 @@ discordHandler Request { path = _path', Request.headers = headers', method = met
                                         else ok "OK")
                                 else forbidden "Invalid signature"
     where
+        response :: MonadIO m => Int -> String -> m (Response (Maybe DiscordWebhookResponse))
         response status resp = pure $ Response {
             body = Just (DiscordWebhookResponse resp),
             statusCode = status,
@@ -107,10 +108,15 @@ discordHandler Request { path = _path', Request.headers = headers', method = met
                 ("Content-Type", "application/json")
                 ]
         }
+        internalServerError :: MonadIO m => String -> m (Response (Maybe DiscordWebhookResponse))
         internalServerError = response 500
+        badRequest :: MonadIO m => String -> m (Response (Maybe DiscordWebhookResponse))
         badRequest = response 400
+        forbidden :: MonadIO m => String -> m (Response (Maybe DiscordWebhookResponse))
         forbidden = response 401
+        ok :: MonadIO m => String -> m (Response (Maybe DiscordWebhookResponse))
         ok = response 200
+        noContent :: MonadIO m => m (Response (Maybe DiscordWebhookResponse))
         noContent = pure $ Response {
             body = Nothing,
             statusCode = 204,

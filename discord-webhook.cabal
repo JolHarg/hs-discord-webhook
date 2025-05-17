@@ -1,0 +1,69 @@
+cabal-version:   3.12
+name:            discord-webhook
+version:         0.2.0.0
+license:         GPL-3.0-only
+license-file:    LICENSE
+author:          Dan Dart
+maintainer:      git@dandart.co.uk
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+common warnings
+  ghc-options: -Wall -Wwarn -threaded -rtsopts -with-rtsopts=-N -Weverything
+    -Wno-unsafe -Wno-safe -Wno-missing-import-lists
+    -Wno-missing-export-lists -Wno-implicit-prelude
+    -Wno-missing-safe-haskell-mode -Wno-missing-kind-signatures
+    -Wno-missing-poly-kind-signatures -Wno-missing-local-signatures
+    -Wno-all-missed-specialisations -Wno-missed-specialisations
+    -Wno-missing-role-annotations -Wno-unrecognised-warning-flags
+    -Wno-missed-specialisations
+
+library
+  import:             warnings
+  exposed-modules:    DiscordHandler
+  build-depends:
+    , aeson              ^>=2.2.3.0
+    , base               ^>=4.21.0.0
+    , base16-bytestring  ^>=1.0.2.0
+    , bytestring         ^>=0.12.2.0
+    , containers         ^>=0.8
+    , cryptonite         ^>=0.30
+    -- , mtl                ^>=2.3.1
+    , openfaas           ^>=0.2.0.0
+    -- , text               ^>=2.1.2
+
+  -- , errors ^>=2.3.0
+  -- , exceptions
+  hs-source-dirs:     lib
+  default-language:   GHC2024
+  default-extensions: UnicodeSyntax
+
+executable discord-webhook
+  import:             warnings
+  main-is:            Main.hs
+  build-depends:
+    -- , aeson           ^>=2.2.3.0
+    , base            ^>=4.21.0.0
+    , discord-webhook ^>=0.2.0.0
+    -- , bytestring      ^>=0.12.2.0
+    , openfaas        ^>=0.2.0.0
+
+  hs-source-dirs:     src
+  default-language:   GHC2024
+  default-extensions: UnicodeSyntax
+
+test-suite openfaas-test
+  import:             warnings
+  default-language:   GHC2024
+  default-extensions: UnicodeSyntax
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     test
+  main-is:            Spec.hs
+  build-depends:
+    , base        ^>=4.21.0.0
+    , bots        ^>=0.2.0.0
+    , hspec       ^>=2.11.10
+    , QuickCheck  ^>=2.15.0.1
+
+  other-modules:
+  build-tool-depends: hspec-discover:hspec-discover
