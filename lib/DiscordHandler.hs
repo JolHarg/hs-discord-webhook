@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveAnyClass      #-}
+{-# LANGUAGE DerivingVia      #-}
 {-# LANGUAGE OverloadedLists     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -29,7 +29,8 @@ data HttpException = HttpException {
     getMessage :: String
 }
     deriving stock (Show)
-    deriving anyclass (Exception)
+
+instance Exception HttpException
 
 type DiscordWebhookPayloadType = Int
 
@@ -64,7 +65,7 @@ instance ToJSON DiscordWebhookRequest where
 newtype DiscordWebhookResponse = DiscordWebhookResponse {
     result :: String
 } deriving stock (Eq, Show, Generic)
-    deriving anyclass (FromJSON, ToJSON)
+    deriving (FromJSON, ToJSON) via Generically DiscordWebhookResponse
 
 -- | We want the string and also to decode it. No need to do any decoding for us today.
 -- | TODO: the response should be short-circuitable
