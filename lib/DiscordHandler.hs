@@ -1,6 +1,5 @@
 {-# LANGUAGE DerivingVia      #-}
 {-# LANGUAGE OverloadedLists     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 module DiscordHandler (discordHandler) where
 
