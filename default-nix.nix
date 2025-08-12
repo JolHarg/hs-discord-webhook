@@ -1,8 +1,8 @@
 {
   nixpkgs ? import <nixpkgs> {},
   haskell-tools ? import (builtins.fetchTarball "https://github.com/danwdart/haskell-tools/archive/master.tar.gz") {
-    nixpkgs = nixpkgs;
-    compiler = compiler;
+    inherit nixpkgs;
+    inherit compiler;
   },
   compiler ? "ghc912"
 }:
@@ -11,7 +11,7 @@ let
   pkgsX86 = if builtins.currentSystem == "x86_64-linux" then nixpkgs else nixpkgs.pkgsCross.gnu64.pkgsHostHost;
   gitignore = nixpkgs.nix-gitignore.gitignoreSourcePure [ ./.gitignore ];
   tools = haskell-tools compiler;
-  lib = pkgsX86.haskell.lib;
+  inherit (pkgsX86.haskell) lib;
   myHaskellPackages = pkgsX86.haskell.packages.${compiler}.override {
     overrides = self: super: rec {
       bots = lib.dontHaddock (self.callCabal2nix "bots" (gitignore ./.) {});
@@ -84,5 +84,5 @@ let
   in
 {
   inherit shell;
-  bots = lib.justStaticExecutables (myHaskellPackages.bots);
+  bots = lib.justStaticExecutables myHaskellPackages.bots;
 }
