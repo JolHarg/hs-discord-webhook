@@ -26,7 +26,7 @@ library
   exposed-modules:    DiscordHandler
   build-depends:
     , aeson              ^>=2.2.3.0
-    , base               ^>=4.21.0.0
+    , base               >=4.21.0.0 && <4.23.0.0
     , base16-bytestring  ^>=1.0.2.0
     , bytestring         ^>=0.12.2.0
     , containers         ^>=0.8
@@ -46,7 +46,7 @@ executable discord-webhook
   import:             warnings
   main-is:            Main.hs
   build-depends:
-    , base             ^>=4.21.0.0
+    , base             >=4.21.0.0 && <4.23.0.0
     , discord-webhook  ^>=0.2.0.0
     , openfaas         ^>=0.2.0.0
 
@@ -68,7 +68,7 @@ test-suite openfaas-test
   hs-source-dirs:     test
   main-is:            Spec.hs
   build-depends:
-    , base        ^>=4.21.0.0
+    , base        >=4.21.0.0 && <4.23.0.0
     , bots        ^>=0.2.0.0
     , hspec       ^>=2.11.10
     , QuickCheck  ^>=2.16.0.0
