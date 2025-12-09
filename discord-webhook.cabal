@@ -70,7 +70,7 @@ test-suite openfaas-test
   build-depends:
     , base        >=4.21 && <4.23
     , bots        ^>=0.2
-    , hspec       ^>=2.11.10
+    , hspec       ^>=2.11.15
     , QuickCheck  ^>=2.17
 
   other-modules:
