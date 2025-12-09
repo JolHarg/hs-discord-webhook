@@ -25,18 +25,18 @@ library
   import:             warnings
   exposed-modules:    DiscordHandler
   build-depends:
-    , aeson              ^>=2.2.3.0
-    , base               >=4.21.0.0 && <4.23.0.0
-    , base16-bytestring  ^>=1.0.2.0
-    , bytestring         ^>=0.12.2.0
+    , aeson              ^>=2.2.3
+    , base               >=4.21 && <4.23
+    , base16-bytestring  ^>=1.0.2
+    , bytestring         ^>=0.12.2
     , containers         ^>=0.8
     , cryptonite         ^>=0.30
-    , openfaas           ^>=0.2.0.0
+    , openfaas           ^>=0.2
 
   -- , mtl                ^>=2.3.1
   -- , text               ^>=2.1.2
 
-  -- , errors ^>=2.3.0
+  -- , errors ^>=2.3
   -- , exceptions
   hs-source-dirs:     lib
   default-language:   GHC2024
@@ -46,12 +46,12 @@ executable discord-webhook
   import:             warnings
   main-is:            Main.hs
   build-depends:
-    , base             >=4.21.0.0 && <4.23.0.0
-    , discord-webhook  ^>=0.2.0.0
-    , openfaas         ^>=0.2.0.0
+    , base             >=4.21 && <4.23
+    , discord-webhook  ^>=0.2
+    , openfaas         ^>=0.2
 
-  -- , aeson           ^>=2.2.3.0
-  -- , bytestring      ^>=0.12.2.0
+  -- , aeson           ^>=2.2.3
+  -- , bytestring      ^>=0.12.2
   hs-source-dirs:     src
   default-language:   GHC2024
   default-extensions: UnicodeSyntax
@@ -68,10 +68,10 @@ test-suite openfaas-test
   hs-source-dirs:     test
   main-is:            Spec.hs
   build-depends:
-    , base        >=4.21.0.0 && <4.23.0.0
-    , bots        ^>=0.2.0.0
+    , base        >=4.21 && <4.23
+    , bots        ^>=0.2
     , hspec       ^>=2.11.10
-    , QuickCheck  ^>=2.17.0.0
+    , QuickCheck  ^>=2.17
 
   other-modules:
   build-tool-depends: hspec-discover:hspec-discover
