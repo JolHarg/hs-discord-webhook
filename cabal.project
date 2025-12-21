@@ -4,4 +4,4 @@ source-repository-package
   tag: 64cb9cf5071d4f0391a47ebf4318293d150e0779
 
 packages: *
-allow-newer: containers
+allow-newer: base, containers, ghc-bignum, template-haskell
