@@ -1,4 +1,4 @@
-cabal-version:   3.16
+cabal-version:   3.14
 name:            discord-webhook
 version:         0.2.0.0
 license:         GPL-3.0-only
