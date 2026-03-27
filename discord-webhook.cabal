@@ -9,9 +9,6 @@ build-type:      Simple
 extra-doc-files: CHANGELOG.md
 
 common warnings
-  if !arch(wasm32)
-    ghc-options: -threaded -rtsopts -with-rtsopts=-N
-
   ghc-options:
     -Wall -Wwarn -Weverything -Wno-unsafe -Wno-safe
     -Wno-missing-import-lists -Wno-missing-export-lists
@@ -44,6 +41,8 @@ library
 
 executable discord-webhook
   import:             warnings
+  if !arch(wasm32)
+    ghc-options: -threaded -rtsopts -with-rtsopts=-N
   main-is:            Main.hs
   build-depends:
     , base             ^>=4.22
@@ -56,11 +55,13 @@ executable discord-webhook
   default-language:   GHC2024
   default-extensions: UnicodeSyntax
 
-test-suite openfaas-test
+test-suite discord-webhook-test
   import:             warnings
 
   if (arch(javascript) || arch(wasm32))
     buildable: False
+  if !arch(wasm32)
+    ghc-options: -threaded -rtsopts -with-rtsopts=-N
 
   default-language:   GHC2024
   default-extensions: UnicodeSyntax
@@ -68,10 +69,10 @@ test-suite openfaas-test
   hs-source-dirs:     test
   main-is:            Spec.hs
   build-depends:
-    , base        ^>=4.22
-    , bots        ^>=0.2
+    -- , base        ^>=4.22
+    -- , discord-webhook        ^>=0.2
     , hspec       ^>=2.11.15
-    , QuickCheck  ^>=2.17
+    -- , QuickCheck  ^>=2.18
 
   other-modules:
   build-tool-depends: hspec-discover:hspec-discover
