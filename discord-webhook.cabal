@@ -3,8 +3,8 @@ name:            discord-webhook
 version:         0.2.0.0
 license:         GPL-3.0-only
 license-file:    LICENSE
-author:          Dan Dart
-maintainer:      cabal@dandart.co.uk
+author:          Ember Dart
+maintainer:      cabal@emberdart.co.uk
 build-type:      Simple
 extra-doc-files: CHANGELOG.md
 
@@ -22,7 +22,7 @@ library
   import:             warnings
   exposed-modules:    DiscordHandler
   build-depends:
-    , aeson              ^>=2.2.3
+    , aeson              ^>=2.3.0
     , base               ^>=4.22
     , base16-bytestring  ^>=1.0.2
     , bytestring         ^>=0.12.2
@@ -49,7 +49,7 @@ executable discord-webhook
     , discord-webhook  ^>=0.2
     , openfaas         ^>=0.2
 
-  -- , aeson           ^>=2.2.3
+  -- , aeson           ^>=2.3.0
   -- , bytestring      ^>=0.12.2
   hs-source-dirs:     src
   default-language:   GHC2024
