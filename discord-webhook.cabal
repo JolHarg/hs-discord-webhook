@@ -1,6 +1,6 @@
 cabal-version:   3.14
 name:            discord-webhook
-version:         0.2.0.0
+version:         0.2
 license:         GPL-3.0-only
 license-file:    LICENSE
 author:          Ember Dart
@@ -22,7 +22,7 @@ library
   import:             warnings
   exposed-modules:    DiscordHandler
   build-depends:
-    , aeson              ^>=2.3.0
+    , aeson              ^>=2.3
     , base               ^>=4.22
     , base16-bytestring  ^>=1.0.2
     , bytestring         ^>=0.12.2
@@ -49,7 +49,7 @@ executable discord-webhook
     , discord-webhook  ^>=0.2
     , openfaas         ^>=0.2
 
-  -- , aeson           ^>=2.3.0
+  -- , aeson           ^>=2.3
   -- , bytestring      ^>=0.12.2
   hs-source-dirs:     src
   default-language:   GHC2024
@@ -72,7 +72,7 @@ test-suite discord-webhook-test
     -- , base        ^>=4.22
     -- , discord-webhook        ^>=0.2
     , hspec       ^>=2.11.15
-    -- , QuickCheck  ^>=2.18
+    -- , QuickCheck  ^>=2.19
 
   other-modules:
   build-tool-depends: hspec-discover:hspec-discover
